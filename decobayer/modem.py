@@ -107,10 +107,17 @@ if __name__ == '__main__':
     # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
     result = modem.execute(TransferMode( ))
     print "XYXYXYX"
-    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
-    link.read( )
-    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
-    link.read( )
+    print result.response.frames[-1], result.response.frames[-1].get('load')
+    last_ack = result.response.frames[-1].get('load')[0]
+    if last_ack == 0x04:
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
+      link.read( )
+      # result = modem.execute(TransferMode( ))
+    else:
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
+      link.read( )
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
+      link.read( )
     # now in remote command mode.
 
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
@@ -119,15 +126,15 @@ if __name__ == '__main__':
     link.read( )
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "1", "|" ]))
     link.read( )
-    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "0", "|" ]))
-    link.read( )
+    # link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "0", "|" ]))
+    # link.read( )
     # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
     # link.read( )
     # end remote command mode
-    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x04 ]))
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "\r", 0x04 ]))
     link.read( )
-    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
-    result = modem.execute(TransferMode( ))
+    #link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
+    #result = modem.execute(TransferMode( ))
     """
 
     # the following seems to help exit 
