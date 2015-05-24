@@ -107,8 +107,8 @@ if __name__ == '__main__':
     # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
     result = modem.execute(TransferMode( ))
     print "XYXYXYX"
-    # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
-    # link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
+    link.read( )
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
     link.read( )
     # now in remote command mode.
