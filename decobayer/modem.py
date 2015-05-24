@@ -25,7 +25,7 @@ class Transmission (object):
     self.response = self.Response( )
 
 class StopResponses (Response):
-  MODES = [ 0x05 ]
+  MODES = [ 0x05, 0x04 ]
   def __init__ (self):
     self._done = False
     self.frames = [ ]
@@ -52,7 +52,7 @@ class TransferMode (Transmission):
     self.response = self.Response( )
     print "writing"
     # link.write(bytearray([0x00, 0x00, 0x00, 0x01, 'X']))
-    link.write(bytearray([0x00, 0x00, 0x00, 0x01, 0x06]))
+    # link.write(bytearray([0x00, 0x00, 0x00, 0x01, 0x06]))
     while not self.response.done( ):
       print "reading"
       data = link.read( )
@@ -97,13 +97,44 @@ if __name__ == '__main__':
   from link import Link
   logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
   link = Link.Make( )
-  print link.device
+  # print link.device
   with link:
     modem = Modem(link)
     print modem
     result = modem.execute(TransferModeStop( ))
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
-    result = modem.execute(TransferModeStop( ))
+    # result = modem.execute(TransferModeStop( ))
+    # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
+    result = modem.execute(TransferMode( ))
+    print "XYXYXYX"
+    # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
+    # link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
+    link.read( )
+    # now in remote command mode.
+
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
+    link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
+    link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "1", "|" ]))
+    link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "0", "|" ]))
+    link.read( )
+    # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
+    # link.read( )
+    # end remote command mode
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x04 ]))
-    # result = modem.execute(TransferMode( ))
+    link.read( )
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
+    result = modem.execute(TransferMode( ))
+    """
+
+    # the following seems to help exit 
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
+    result = modem.execute(TransferMode( ))
+    link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
+    link.read( )
+    print "will reset in 5 minutes or so"
+    """
     print result
