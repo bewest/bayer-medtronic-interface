@@ -1,0 +1,5 @@
+<__main__.Modem object at 0x7f25d2fe4b90>
+writing
+INFO:decobayer.link:WRITE 5
+0000   0x00 0x00 0x00 0x01 0x58                   ....X
+reading
