@@ -158,9 +158,9 @@ if __name__ == '__main__':
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
       link.read( )
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "1", "|" ]))
+      link.read( )
       # now in remote command mode.
       # end remote command mode
-      link.read( )
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
       link.read( )
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
