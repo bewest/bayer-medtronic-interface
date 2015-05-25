@@ -129,12 +129,6 @@ if __name__ == '__main__':
 
     with modem.remote( ) as control:
 
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
-      link.read( )
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
-      link.read( )
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "1", "|" ]))
-      link.read( )
       # now in remote command mode.
       remote = Remote(link, serial)
       model = remote.query(commands.ReadPumpModel)
@@ -142,9 +136,3 @@ if __name__ == '__main__':
       print "MODEL", model.getData( )
 
       # end remote command mode
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
-      link.read( )
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
-      link.read( )
-      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "0", "|" ]))
-      link.read( )

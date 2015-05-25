@@ -103,12 +103,14 @@ class Modem (object):
       result = self.execute(TransferMode( ))
       return result
 
-  def remote (self):
-    return CommandContext(self)
+  def remote (self, **kwds):
+    return CommandContext(self, **kwds)
 
 class CommandContext (object):
-  def __init__ (self, modem):
+  init_remote = True
+  def __init__ (self, modem, init_remote=True):
     self.modem = modem
+    self.init_remote = init_remote
 
   def __enter__ (self):
     link = self.modem.link
@@ -130,10 +132,28 @@ class CommandContext (object):
       link.read( )
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
       link.read( )
+
+    if self.init_remote:
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
+      link.read( )
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
+      link.read( )
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "1", "|" ]))
+      link.read( )
+      # now in remote command mode.
     return self
   def __exit__(self, type, value, traceback):
     link = self.modem.link
     modem = self.modem
+    if self.init_remote:
+      # end remote command mode
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
+      link.read( )
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "Q", "|" ]))
+      link.read( )
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "0", "|" ]))
+      link.read( )
+      # end remote command mode
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "\r", 0x04 ]))
     link.read( )
 
@@ -152,7 +172,7 @@ if __name__ == '__main__':
     print modem
     modem.init_modem( )
 
-    with modem.remote( ) as control:
+    with modem.remote(init_remote=False) as control:
 
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "W", "|" ]))
       link.read( )
