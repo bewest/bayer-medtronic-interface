@@ -17,6 +17,20 @@ Contour Nextlink.
 
 
 ## Status Quo
-* can get into command mode, but does not send comms yet
 
-`python -m decobayer.modem`
+Work in progress:
+
+* can get into command mode `python -m decobayer.modem`
+* can read talk to pump remotely: `python -m decobayer.remote`
+  As a test, this reads `SERIAL` environment variable, and reads that pump's
+  model number. (In order for this to work, the comm's need to be initialized
+  already, use `openaps` or `mm-send-comm.py` to initialize comms.
+
+
+### Help needed
+
+* PowerControl
+* Sending parameters
+* Identifying CRC's, length fields
+* Reading long frames, identifying length fields to determine when frames are
+  done
