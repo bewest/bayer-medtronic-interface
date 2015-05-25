@@ -121,6 +121,7 @@ class CommandContext (object):
     last_ack = result.response.frames[-1].get('load')[0]
     print result.response.frames[-1], last_ack
     if last_ack == 0x04:
+      print "WEIRD"
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
       link.read( )
       # result = modem.execute(TransferMode( ))
