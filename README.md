@@ -18,5 +18,5 @@ Contour Nextlink.
 
 ## Status Quo
 * can get into command mode, but does not send comms yet
-* does not seem to exit command mode cleanly.
 
+`python -m decobayer.modem`
