@@ -1,4 +1,5 @@
 
+from usb.core import USBError
 from decocare import lib
 import logging
 log = logging.getLogger( ).getChild(__name__)
@@ -93,6 +94,11 @@ class Modem (object):
     return exchange(self.link)
 
 if __name__ == '__main__':
+  """
+  Goal is to get in and out of command mode, in a clean repeatable way.
+  Should be able to run consecutively without problems.
+  XXX: close, but not working.
+  """
   import sys
   from link import Link
   logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -101,14 +107,20 @@ if __name__ == '__main__':
   with link:
     modem = Modem(link)
     print modem
-    result = modem.execute(TransferModeStop( ))
+    try:
+      result = modem.execute(TransferModeStop( ))
+    except USBError, e:
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "\r", 0x02 ]))
+      link.write(bytearray([ 0x00, 0x00, 0x00, 0x02, "\r", 0x02 ]))
+      result = modem.execute(TransferMode( ))
+      
     link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x15 ]))
     # result = modem.execute(TransferModeStop( ))
     # link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x06 ]))
     result = modem.execute(TransferMode( ))
     print "XYXYXYX"
-    print result.response.frames[-1], result.response.frames[-1].get('load')
     last_ack = result.response.frames[-1].get('load')[0]
+    print result.response.frames[-1], last_ack
     if last_ack == 0x04:
       link.write(bytearray([ 0x00, 0x00, 0x00, 0x01, 0x05 ]))
       link.read( )
