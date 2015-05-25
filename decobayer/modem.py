@@ -140,7 +140,6 @@ if __name__ == '__main__':
   """
   Goal is to get in and out of command mode, in a clean repeatable way.
   Should be able to run consecutively without problems.
-  XXX: close, but not working.
   """
   import sys
   from link import Link
